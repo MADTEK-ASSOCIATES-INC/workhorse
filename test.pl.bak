@@ -1,0 +1,4 @@
+#!/usr/bin/perl
+
+$x = "hello there";
+print "\n$x\n";

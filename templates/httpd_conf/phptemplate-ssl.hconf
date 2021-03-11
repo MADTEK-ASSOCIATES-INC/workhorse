@@ -1,0 +1,55 @@
+# BEGIN 
+<VirtualHost <IP>:80>
+        DocumentRoot "/var/www/<CLIENT>/<PLATFORM>/<DOMAIN>/public_html"
+        ServerName www.<DOMAIN>
+        ServerAlias <DOMAIN>
+        SuexecUserGroup USER GROUP
+        ScriptAlias /cgi-bin/ "/var/www/<CLIENT>/<PLATFORM>/<DOMAIN>/cgi-bin/"
+        ErrorLog "|/usr/sbin/rotatelogs /var/www/<CLIENT>/<PLATFORM>/<DOMAIN>/logs/error.log 86400"
+        CustomLog "|/usr/sbin/rotatelogs /var/www/<CLIENT>/<PLATFORM>/<DOMAIN>/logs/access.log 86400" common
+
+        <Directory "/var/www/<CLIENT>/<PLATFORM>/<DOMAIN>/public_html">
+                Options -Indexes FollowSymLinks +ExecCGI
+                AllowOverride All
+                AddHandler php5-fastcgi .php
+                Action php5-fastcgi /cgi-bin/php.fcgi
+                Order allow,deny
+                Allow from all
+        </Directory>
+        <Directory "/var/www/<CLIENT>/<PLATFORM>/<DOMAIN>/cgi-bin">
+                AllowOverride None
+                Options None
+                Order allow,deny
+                Allow from all
+        </Directory>
+</VirtualHost>
+
+
+<VirtualHost <IP>:443>
+        DocumentRoot "/var/www/<CLIENT>/<PLATFORM>/<DOMAIN>/public_html"
+        ServerName www.<DOMAIN>
+        SuexecUserGroup webmaster webmaster
+        ScriptAlias /cgi-bin/ "/var/www/<CLIENT>/<PLATFORM>/<DOMAIN>/cgi-bin/"
+        ErrorLog "|/usr/sbin/rotatelogs /var/www/<CLIENT>/<PLATFORM>/<DOMAIN>/logs/error_log 86400"
+        CustomLog "|/usr/sbin/rotatelogs /var/www/<CLIENT>/<PLATFORM>/<DOMAIN>/logs/access_log 86400" common
+        <Directory "/var/www/<CLIENT>/<PLATFORM>/<DOMAIN>/public_html">
+                Options -Indexes FollowSymLinks +ExecCGI
+                AllowOverride All
+                AddHandler php5-fastcgi .php
+                Action php5-fastcgi /cgi-bin/php.fcgi
+                Order allow,deny
+                Allow from all
+        </Directory>
+        <Directory "/var/www/<CLIENT>/<PLATFORM>/<DOMAIN>/cgi-bin">
+                AllowOverride None
+                Options None
+                Order allow,deny
+                Allow from all
+        </Directory>
+SSLEngine On
+SSLCertificateFile /etc/httpd/conf/ssl/TARGETSSLFILENAME.crt
+SSLCertificateKeyFile /etc/httpd/conf/ssl/TARGETSSLFILENAME.key
+
+</VirtualHost>
+
+# END
